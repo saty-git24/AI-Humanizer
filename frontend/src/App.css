@@ -1,0 +1,128 @@
+/* Global layout */
+html, body {
+  height: 100%;
+  margin: 0;
+  background-color: #FFE5B4; /* Light orange */
+  font-family: 'Satoshi', sans-serif;
+  overflow: hidden; /* Prevent page scroll */
+}
+
+#root {
+  height: 100%;
+  background-color: #fcf7ef;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Container takes full height */
+.container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+/* Header styling */
+.heading-icon {
+  font-weight: bold;
+  color: #1F1F1F;
+  display: flex;
+  align-items: center;
+}
+
+.top-icons {
+  display: flex;
+  align-items: center;
+}
+
+.icon-style {
+  color: #1F1F1F;
+}
+
+/* Blocks wrapper */
+.blocks-wrapper {
+  background-color: #fff0db;
+  padding: 20px;
+  border-radius: 20px;
+  box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.05);
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+}
+
+/* Chat block */
+.chat-block {
+  flex-grow: 1;
+  overflow-y: auto;
+  margin-bottom: 20px;
+  padding-right: 10px;
+}
+
+.chat-message {
+  display: flex;
+  flex-direction: column;
+  margin: 10px 0;
+}
+
+.message.right {
+  background-color: #fce7c7;
+  align-self: flex-end;
+  border-radius: 12px;
+  padding: 12px;
+  margin-bottom: 5px;
+  max-width: 70%;
+  box-shadow: 0px 2px 5px rgba(0,0,0,0.1);
+}
+
+.message.left {
+  background-color: #fff9f0;
+  align-self: flex-start;
+  border-radius: 12px;
+  padding: 12px;
+  margin-bottom: 5px;
+  max-width: 70%;
+  box-shadow: 0px 2px 5px rgba(0,0,0,0.1);
+}
+
+/* Input block */
+.input-block {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+/* Textarea */
+.custom-textarea {
+  resize: none;
+  font-size: 16px;
+  padding: 12px;
+  border-radius: 8px;
+  width: 100%;
+  border: 1px solid #ccc;
+  margin-bottom: 12px;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+}
+
+/* Button */
+.custom-btn {
+  background-color: #FF9A8B;
+  border: none;
+  color: white;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: background-color 0.3s ease;
+  box-shadow: 0px 3px 6px rgba(0,0,0,0.1);
+}
+
+.custom-btn:hover {
+  background-color: #a33a31;
+}
