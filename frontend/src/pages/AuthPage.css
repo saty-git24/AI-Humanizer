@@ -7,7 +7,7 @@
 }
 
 .auth-card {
-    background-color: #d3a45f;
+    background-color: #ddbd8e;
     padding: 3rem;
     border-radius: 16px;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
@@ -58,7 +58,7 @@
 }
 
 .auth-btn {
-    background-color: #a56249;
+    background-color: #e2997f;
     padding: 0.9rem;
     border-radius: 8px;
     font-size: 1.5rem;
