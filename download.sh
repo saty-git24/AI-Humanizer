@@ -1,0 +1,1 @@
+wget https://huggingface.co/harshroxnox/Mistral-7B-Instruct-v0.3-Q5_K_M-GGUF/resolve/main/mistral-7b-instruct-v0.3-q5_k_m.gguf

@@ -7,7 +7,7 @@ app = Flask(__name__)
 CORS(app)
 
 # Load the model from your local path
-model_path = "/home/gautam/Desktop/AI humaniser/mistral-7b-instruct-v0.3-q5_k_m.gguf"  # Update this to your actual file path
+model_path = "./mistral-7b-instruct-v0.3-q5_k_m.gguf"  # Update this to your actual file path
 
 llm = Llama(
     model_path=model_path,
