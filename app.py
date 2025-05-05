@@ -2,9 +2,31 @@ from flask import Flask, request, jsonify
 from llama_cpp import Llama
 import os
 from flask_cors import CORS
+import bcrypt
+import jwt
+import datetime
+import mysql.connector
 
 app = Flask(__name__)
 CORS(app)
+app.config['SECRET_KEY'] = 'your-secret-key' 
+
+# MySQL connection
+db = mysql.connector.connect(
+    host="localhost",
+    user="root",
+    password="mysql",
+    database="humanizer"
+)
+cursor = db.cursor(dictionary=True)
+
+# Helper: Create JWT token
+def generate_token(user_id):
+    payload = {
+        'user_id': user_id,
+        'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=1)
+    }
+    return jwt.encode(payload, app.config['SECRET_KEY'], algorithm='HS256')
 
 # Load the model from your local path
 model_path = "./mistral-7b-instruct-v0.3-q5_k_m.gguf"  # Update this to your actual file path
@@ -31,6 +53,49 @@ def paraphrase_with_prompt(text):
     output = response["choices"][0]["text"].strip()
     return output
 
+
+# Register
+@app.route('/register', methods=['POST'])
+def register():
+    data = request.json
+    username = data['username']
+    password = data['password']
+
+    # Check if user exists
+    cursor.execute("SELECT * FROM users WHERE username = %s", (username,))
+    if cursor.fetchone():
+        return jsonify({'message': 'User already exists'}), 409
+
+    # Hash password
+    hashed = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+
+    # Insert user
+    cursor.execute("INSERT INTO users (username, password_hash) VALUES (%s, %s)", (username, hashed))
+    db.commit()
+
+    return jsonify({'message': 'User registered successfully'}), 201
+
+
+# Login
+@app.route('/login', methods=['POST'])
+def login():
+    data = request.json
+    username = data['username']
+    password = data['password']
+
+    cursor.execute("SELECT * FROM users WHERE username = %s", (username,))
+    user = cursor.fetchone()
+
+    if not user or not bcrypt.checkpw(password.encode('utf-8'), user['password_hash'].encode('utf-8')):
+        return jsonify({'message': 'Invalid credentials'}), 401
+
+    token = generate_token(user['id'])
+    return jsonify({'token': token})
+
+# Logout (client-side should handle token deletion)
+@app.route('/logout', methods=['POST'])
+def logout():
+    return jsonify({'message': 'Logged out (client must delete token)'}), 200
 
 # API route
 @app.route("/paraphrase", methods=["POST"])
