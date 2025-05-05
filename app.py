@@ -8,7 +8,7 @@ import datetime
 import mysql.connector
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, supports_credentials=True)
 app.config['SECRET_KEY'] = 'your-secret-key' 
 
 # MySQL connection
@@ -59,10 +59,11 @@ def paraphrase_with_prompt(text):
 def register():
     data = request.json
     username = data['username']
+    email = data['email']
     password = data['password']
 
     # Check if user exists
-    cursor.execute("SELECT * FROM users WHERE username = %s", (username,))
+    cursor.execute("SELECT * FROM users WHERE email = %s", (email,))
     if cursor.fetchone():
         return jsonify({'message': 'User already exists'}), 409
 
@@ -70,7 +71,7 @@ def register():
     hashed = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
 
     # Insert user
-    cursor.execute("INSERT INTO users (username, password_hash) VALUES (%s, %s)", (username, hashed))
+    cursor.execute("INSERT INTO users (username, password_hash, email) VALUES (%s, %s, %s)", (username, hashed, email))
     db.commit()
 
     return jsonify({'message': 'User registered successfully'}), 201
@@ -80,17 +81,17 @@ def register():
 @app.route('/login', methods=['POST'])
 def login():
     data = request.json
-    username = data['username']
+    email = data['email']
     password = data['password']
 
-    cursor.execute("SELECT * FROM users WHERE username = %s", (username,))
+    cursor.execute("SELECT * FROM users WHERE email = %s", (email,))
     user = cursor.fetchone()
 
     if not user or not bcrypt.checkpw(password.encode('utf-8'), user['password_hash'].encode('utf-8')):
-        return jsonify({'message': 'Invalid credentials'}), 401
+        return jsonify({'error': 'Invalid credentials'}), 401
 
     token = generate_token(user['id'])
-    return jsonify({'token': token})
+    return jsonify({'message': token})
 
 # Logout (client-side should handle token deletion)
 @app.route('/logout', methods=['POST'])
